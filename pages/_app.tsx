@@ -1,10 +1,8 @@
 import React from 'react';
 import {Rubik, Source_Code_Pro} from 'next/font/google';
-import {WalletContextApp} from '@builtbymom/web3/contexts/useWallet';
 import {WithMom} from '@builtbymom/web3/contexts/WithMom';
 import {WithTokenList} from '@builtbymom/web3/contexts/WithTokenList';
 import {localhost} from '@builtbymom/web3/utils/wagmi';
-import {SafeProvider} from '@gnosis.pm/safe-apps-react-sdk';
 import {supportedNetworks, supportedTestNetworks} from '@utils/tools.chains';
 import {Analytics} from '@vercel/analytics/react';
 import Meta from '@common/Meta';
@@ -44,14 +42,10 @@ function MyApp(props: AppProps): ReactElement {
 			</style>
 			<WithMom supportedChains={[...supportedNetworks, ...supportedTestNetworks, localhost]}>
 				<WithTokenList>
-					<WalletContextApp>
-						<SafeProvider>
-							<main className={`flex h-app flex-col ${rubik.variable} ${sourceCodePro.variable}`}>
-								<Meta />
-								<Component {...props} />
-							</main>
-						</SafeProvider>
-					</WalletContextApp>
+					<main className={`flex h-app flex-col ${rubik.variable} ${sourceCodePro.variable}`}>
+						<Meta />
+						<Component {...props} />
+					</main>
 				</WithTokenList>
 			</WithMom>
 			<Analytics />
