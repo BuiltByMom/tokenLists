@@ -7,7 +7,7 @@
 	.max-w-4xl,
 	.max-w-5xl,
 	.max-w-6xl {
-		@apply px-0;
+		@apply px-4;
 	}
 
 	.font-number {

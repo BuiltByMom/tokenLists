@@ -172,14 +172,14 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 	return (
 		<>
 			<TokenListHero summary={summary} />
-			<div className={'mx-auto mt-10 grid w-full max-w-5xl grid-cols-2'}>
+			<div className={'mx-auto mt-10 flex w-full max-w-5xl grid-cols-2 flex-col-reverse md:grid'}>
 				<Filters
 					allSupportedChains={allSupportedChains || ([] as chains.Chain[])}
 					network={network}
 					set_network={set_network}
 					set_search={set_search}
 				/>
-				<menu className={'mb-4 flex flex-row items-center justify-end text-xs'}>
+				<menu className={'flex flex-row items-center text-xs md:mb-4 md:justify-end'}>
 					<button
 						onClick={(): void => set_typeOfList('tokens')}
 						className={`transition-colors ${
