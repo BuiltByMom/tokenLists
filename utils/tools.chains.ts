@@ -32,7 +32,6 @@ export const supportedTestNetworks = [goerli, baseGoerli];
 
 export type TAppExtendedChain = TExtendedChain & {
 	safeApiUri?: string;
-	coingeckoGasCoinID: string;
 	contracts: {
 		nftMigratooorContract?: TChainContract;
 	};

@@ -4,6 +4,7 @@ import {
 	avalanche,
 	base,
 	baseGoerli,
+	blast,
 	bsc,
 	celo,
 	fantom,
@@ -17,12 +18,11 @@ import {
 	polygonZkEvm,
 	scroll,
 	zkSync
-} from 'wagmi/chains';
+} from 'viem/chains';
 import {toAddress} from '@builtbymom/web3/utils';
 import {indexedWagmiChains} from '@yearn-finance/web-lib/utils/wagmi/utils';
 
 import type {TChainContract, TExtendedChain} from '@yearn-finance/web-lib/utils/wagmi/utils';
-import type {TNDict} from '@builtbymom/web3/types';
 
 export const MATIC_TOKEN_ADDRESS = toAddress('0x0000000000000000000000000000000000001010');
 export const POLYGON_LENS_ADDRESS = toAddress('0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d');
@@ -47,6 +47,7 @@ export const SUPPORTED_CHAINS = [
 	linea,
 	scroll,
 	aurora,
+	blast,
 	//Testnets
 	goerli,
 	baseGoerli
@@ -74,35 +75,8 @@ export const SUPPORTED_SMOL_CHAINS = [
 	baseGoerli
 ];
 
-export const SUPPORTED_CHAIN_IDS: TNDict<string> = {
-	1: 'Ethereum',
-	10: 'Optimism',
-	56: 'Binance Smart Chain',
-	100: 'Gnosis',
-	137: 'Polygon',
-	// 250: 'Fantom',
-	324: 'zkSync',
-	1101: 'Polygon ZKEVM',
-	8453: 'Base',
-	42161: 'Arbitrum',
-	43114: 'Avalanche'
-};
-
-export const coingeckoGasCoinIDs: TNDict<string> = {
-	1: 'ethereum',
-	10: 'ethereum',
-	56: 'binancecoin',
-	100: 'xdai',
-	137: 'matic-network',
-	250: 'fantom',
-	324: 'ethereum',
-	8453: 'ethereum',
-	42161: 'ethereum'
-};
-
 export type TAppExtendedChain = TExtendedChain & {
 	safeApiUri?: string;
-	coingeckoGasCoinID: string;
 	contracts: {
 		nftMigratooorContract?: TChainContract;
 	};
@@ -115,5 +89,4 @@ for (const chain of Object.values(indexedWagmiChains)) {
 	extendedChain.contracts = {
 		...chain.contracts
 	};
-	extendedChain.coingeckoGasCoinID = coingeckoGasCoinIDs?.[chain.id] || 'ethereum';
 }

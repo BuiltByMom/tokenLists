@@ -68,6 +68,7 @@
 		"vitest.config.ts",
 		"worker/index.js",
 		"stylelint.config.js",
-		"utils/*/*.json"
+		"utils/*/*.json",
+		"pages/.chains.tsx"
 	]
 }
