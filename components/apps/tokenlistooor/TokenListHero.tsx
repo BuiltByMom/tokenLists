@@ -1,4 +1,5 @@
 import React from 'react';
+import {toast} from 'react-hot-toast';
 import Link from 'next/link';
 import {Button} from 'components/Primitives/Button';
 import dayjs, {extend} from 'dayjs';
@@ -6,8 +7,8 @@ import dayjsDuration from 'dayjs/plugin/duration.js';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import weekday from 'dayjs/plugin/weekday.js';
 import {useTimer} from 'hooks/useTimer';
-import {IconSocialGithub} from '@yearn-finance/web-lib/icons/IconSocialGithub';
-import {copyToClipboard} from '@yearn-finance/web-lib/utils/helpers';
+import {copyToClipboard} from '@builtbymom/web3/utils';
+import {IconSocialGithub} from '@icons/IconSocialGithub';
 
 import type {ReactElement} from 'react';
 import type {TTokenListSummary} from '@utils/types/types';
@@ -86,7 +87,10 @@ function TokenListHero({summary}: {summary: TTokenListSummary | undefined}): Rea
 						<button
 							onClick={(): void =>
 								copyToClipboard(
-									'https://raw.githubusercontent.com/Migratooor/tokenLists/main/lists/tokenlistooor.json'
+									'https://raw.githubusercontent.com/Migratooor/tokenLists/main/lists/tokenlistooor.json',
+									() => {
+										toast.success('Link copied to clipboard.');
+									}
 								)
 							}
 							className={

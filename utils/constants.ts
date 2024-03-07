@@ -20,9 +20,7 @@ import {
 	zkSync
 } from 'viem/chains';
 import {toAddress} from '@builtbymom/web3/utils';
-import {indexedWagmiChains} from '@yearn-finance/web-lib/utils/wagmi/utils';
-
-import type {TChainContract, TExtendedChain} from '@yearn-finance/web-lib/utils/wagmi/utils';
+import {indexedWagmiChains, type TChainContract, type TExtendedChain} from '@builtbymom/web3/utils/wagmi';
 
 export const MATIC_TOKEN_ADDRESS = toAddress('0x0000000000000000000000000000000000001010');
 export const POLYGON_LENS_ADDRESS = toAddress('0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d');
@@ -86,7 +84,5 @@ for (const chain of Object.values(indexedWagmiChains)) {
 		continue;
 	}
 	const extendedChain = chain as TAppExtendedChain;
-	extendedChain.contracts = {
-		...chain.contracts
-	};
+	extendedChain.contracts = chain.contracts;
 }

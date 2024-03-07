@@ -1,8 +1,11 @@
 import React from 'react';
+import {Toaster} from 'react-hot-toast';
 import {Rubik, Source_Code_Pro} from 'next/font/google';
 import {WithMom} from '@builtbymom/web3/contexts/WithMom';
 import {WithTokenList} from '@builtbymom/web3/contexts/WithTokenList';
 import {localhost} from '@builtbymom/web3/utils/wagmi';
+import {IconCheck} from '@icons/IconCheck';
+import {IconCircleCross} from '@icons/IconCircleCross';
 import {supportedNetworks, supportedTestNetworks} from '@utils/tools.chains';
 import {Analytics} from '@vercel/analytics/react';
 import Meta from '@common/Meta';
@@ -49,6 +52,27 @@ function MyApp(props: AppProps): ReactElement {
 				</WithTokenList>
 			</WithMom>
 			<Analytics />
+			<Toaster
+				toastOptions={{
+					duration: 5000,
+					className: 'toast',
+					success: {
+						icon: <IconCheck className={'-mr-1 size-5 min-h-5 min-w-5 pt-1.5'} />,
+						iconTheme: {
+							primary: 'black',
+							secondary: '#F1EBD9'
+						}
+					},
+					error: {
+						icon: <IconCircleCross className={'-mr-1 size-5 min-h-5 min-w-5 pt-1.5'} />,
+						iconTheme: {
+							primary: 'black',
+							secondary: '#F1EBD9'
+						}
+					}
+				}}
+				position={'top-right'}
+			/>
 		</>
 	);
 }

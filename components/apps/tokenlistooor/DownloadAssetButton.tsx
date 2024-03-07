@@ -1,7 +1,7 @@
+import {toast} from 'react-hot-toast';
 import {useDownloadFile} from 'hooks/useDownloadFile';
 import axios from 'axios';
 import {IconDownload} from '@icons/IconDownload';
-import {toast} from '@yearn-finance/web-lib/components/yToast';
 
 import type {AxiosResponse} from 'axios';
 import type {ReactElement} from 'react';
@@ -35,7 +35,7 @@ export function DownloadAssetButton({
 	const {download} = useDownloadFile({
 		apiDefinition: downloadFile,
 		postDownloading: onSuccess,
-		onError: () => toast({type: 'error', content: 'Something went wrong'}),
+		onError: () => toast.error('Something went wrong'),
 		fileName,
 		fileType: type
 	});

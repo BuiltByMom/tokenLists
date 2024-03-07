@@ -1,4 +1,5 @@
 import React, {useMemo, useState} from 'react';
+import {toast} from 'react-hot-toast';
 import Link from 'next/link';
 import {useRouter} from 'next/router';
 import {DefaultSeo} from 'next-seo';
@@ -9,19 +10,18 @@ import relativeTime from 'dayjs/plugin/relativeTime.js';
 import weekday from 'dayjs/plugin/weekday.js';
 import * as chains from 'wagmi/chains';
 import {motion} from 'framer-motion';
+import {getNetwork} from '@builtbymom/web3/utils/wagmi';
+import {IconSocialGithub} from '@icons/IconSocialGithub';
 import {useMountEffect} from '@react-hookz/web';
 import {DownloadAssetButton} from '@tokenlistooor/DownloadAssetButton';
-import {toast} from '@yearn-finance/web-lib/components/yToast';
-import {IconSocialGithub} from '@yearn-finance/web-lib/icons/IconSocialGithub';
-import {getNetwork} from '@yearn-finance/web-lib/utils/wagmi/utils';
 import {EmptyListMessage} from '@common/EmptyListMessage';
 import {ImageWithFallback} from '@common/ImageWithFallback';
 
 import type {Variants} from 'framer-motion';
 import type {GetServerSidePropsResult, NextPageContext} from 'next';
 import type {ReactElement} from 'react';
-import type {TExtendedChain} from '@yearn-finance/web-lib/utils/wagmi/utils';
 import type {TNDict} from '@builtbymom/web3/types';
+import type {TExtendedChain} from '@builtbymom/web3/utils/wagmi';
 import type {TTokenListItem} from '@utils/types/types';
 
 extend(relativeTime);
@@ -141,7 +141,7 @@ function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElemen
 		address: item.address,
 		chainId: item.chainId,
 		fileName: item.symbol,
-		onSuccess: () => toast({type: 'success', content: `Succesfully dowloaded ${item.symbol} asset`})
+		onSuccess: () => toast.success(`Succesfully dowloaded ${item.symbol} asset`)
 	};
 
 	return (
