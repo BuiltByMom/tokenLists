@@ -69,6 +69,7 @@
 		"worker/index.js",
 		"stylelint.config.js",
 		"utils/*/*.json",
-		"pages/.chains.tsx"
+		"pages/.chains.tsx",
+		"chains.tsx.draft"
 	]
 }

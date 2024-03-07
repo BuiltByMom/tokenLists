@@ -15,7 +15,7 @@
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx"
 	},
 	"dependencies": {
-		"@builtbymom/web3": "^0.0.36",
+		"@builtbymom/web3": "^0.0.38",
 		"@headlessui/react": "^1.7.18",
 		"@rainbow-me/rainbowkit": "^1.3.3",
 		"@react-hookz/web": "^24.0.2",
