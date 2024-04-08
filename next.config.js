@@ -33,7 +33,6 @@ module.exports = phase =>
 		},
 		redirects() {
 			return [
-				// {source: '/', has: [{type: 'host', value: 'migrate.smold.app'}], destination: '/migratooor', permanent: true},
 				{
 					source: '/tokenlistooor/:path*',
 					destination: '/list/:path*',
@@ -48,8 +47,6 @@ module.exports = phase =>
 		},
 		async rewrites() {
 			return [
-				// {source: '/disperse', has: [{type: 'host', value: 'disperse.smold.app'}], destination: '/'},
-				// {source: '/:path*', has: [{type: 'host', value: 'migrate.smold.app'}], destination: '/'},
 				{
 					source: '/js/script.js',
 					destination: 'https://plausible.io/js/script.js'

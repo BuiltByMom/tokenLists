@@ -64,7 +64,7 @@ function TokenListHero({summary}: {summary: TTokenListSummary | undefined}): Rea
 					</p>
 					<div className={'mt-6 flex items-center gap-x-6 md:mt-10'}>
 						<Link
-							href={'https://github.com/migratooor/tokenlists/'}
+							href={'https://github.com/SmolDapp/tokenLists/'}
 							target={'_blank'}>
 							<Button>
 								<IconSocialGithub className={'mr-4 size-6'} />
@@ -87,7 +87,7 @@ function TokenListHero({summary}: {summary: TTokenListSummary | undefined}): Rea
 						<button
 							onClick={(): void =>
 								copyToClipboard(
-									'https://raw.githubusercontent.com/Migratooor/tokenLists/main/lists/tokenlistooor.json',
+									'https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/tokenlistooor.json',
 									() => {
 										toast.success('Link copied to clipboard.');
 									}
