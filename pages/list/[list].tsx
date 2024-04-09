@@ -42,7 +42,9 @@ const variants = {
 };
 
 function TokenListHero({list}: {list: TTokenListItem}): ReactElement {
-	const fileName = (list.URI || '').replace('https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/', '');
+	const fileName = (list.URI || '')
+		.toLowerCase()
+		.replace('https://raw.githubusercontent.com/smoldapp/tokenlists/main/lists/', '');
 
 	return (
 		<div className={'relative isolate mt-6'}>
