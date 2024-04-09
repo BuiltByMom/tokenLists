@@ -17,7 +17,10 @@ extend(dayjsDuration);
 extend(weekday);
 
 function TokenListCard({item, network}: {item: TTokenListItem; network: number}): ReactElement {
-	const fileName = item.URI.replace('https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/', '');
+	const fileName = (item.URI || '')
+		.toLowerCase()
+		.replace('https://raw.githubusercontent.com/smoldapp/tokenlists/main/lists/', '');
+
 	return (
 		<div className={'relative flex w-full flex-col overflow-hidden rounded-md transition-shadow hover:shadow-md'}>
 			<Link href={`/list/${fileName.replace('.json', '')}`}>
