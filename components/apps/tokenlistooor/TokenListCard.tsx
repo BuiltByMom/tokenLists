@@ -27,11 +27,11 @@ function TokenListCard({item, network}: {item: TTokenListItem; network: number})
 				<div className={'mb-2 flex w-full items-start justify-between px-4 md:px-6'}>
 					<ImageWithFallback
 						unoptimized
-						src={item.logoURI}
+						src={item.logoURI || ''}
 						altSrc={
-							item.logoURI?.startsWith('ipfs://')
-								? `https://ipfs.io/ipfs/${item.logoURI.replace('ipfs://', '')}`
-								: item.logoURI
+							(item.logoURI || '')?.startsWith('ipfs://')
+								? `https://ipfs.io/ipfs/${(item.logoURI || '').replace('ipfs://', '')}`
+								: item.logoURI || ''
 						}
 						width={36}
 						height={36}
@@ -99,7 +99,7 @@ function LegacyTokenListCard({item}: {item: Partial<TTokenListItem>}): ReactElem
 					unoptimized
 					src={
 						item?.logoURI?.startsWith('ipfs://')
-							? `https://ipfs.io/ipfs/${item.logoURI.replace('ipfs://', '')}`
+							? `https://ipfs.io/ipfs/${(item.logoURI || '').replace('ipfs://', '')}`
 							: item?.logoURI || ''
 					}
 					width={36}

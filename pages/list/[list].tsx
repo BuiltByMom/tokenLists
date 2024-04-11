@@ -135,7 +135,7 @@ function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElemen
 		}
 	}, [item.chainId]);
 
-	const isLogoInAssetLists = item.logoURI.includes('assets.smold.app');
+	const isLogoInAssetLists = (item.logoURI || '').includes('assets.smold.app');
 	const isSmolAssetsPage = router.query.list === 'smolAssets';
 	const shouldDisplayDownloadButtons = isLogoInAssetLists && isSmolAssetsPage;
 
@@ -155,7 +155,7 @@ function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElemen
 					height={40}
 					quality={90}
 					unoptimized
-					src={item.logoURI}
+					src={item.logoURI || ''}
 				/>
 				<div>
 					<p className={'text-sm'}>
