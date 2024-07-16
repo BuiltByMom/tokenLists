@@ -103,21 +103,31 @@ export function Filters({
 
 function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 	const allLists = summary.lists;
-	const [typeOfList, set_typeOfList] = useState<'tokens' | 'pools' | 'legacy'>('tokens');
+	const [typeOfList, set_typeOfList] = useState<'tokens' | 'pools' | 'chains' | 'legacy'>('chains');
 	const [search, set_search] = useState('');
 	const [network, set_network] = useState(-1);
 
-	const {tokens, pools} = useMemo((): {tokens: TTokenListItem[]; pools: TTokenListItem[]} => {
+	const {tokens, pools, networks} = useMemo((): {
+		tokens: TTokenListItem[];
+		pools: TTokenListItem[];
+		networks: TTokenListItem[];
+	} => {
 		const tokens: TTokenListItem[] = [];
 		const pools: TTokenListItem[] = [];
+		const networks: TTokenListItem[] = [];
 		allLists.forEach((list: TTokenListItem): void => {
-			if (list.name.toLowerCase().includes('token pool')) {
+			if (list.description.toLowerCase().includes('the most popular tokens on')) {
+				if (list.tokenCount === 0) {
+					return;
+				}
+				networks.push(list);
+			} else if (list.name.toLowerCase().includes('token pool')) {
 				pools.push(list);
 			} else {
 				tokens.push(list);
 			}
 		});
-		return {tokens, pools};
+		return {tokens, pools, networks};
 	}, [allLists]);
 
 	const allSupportedChains = useMemo((): chains.Chain[] => {
@@ -143,7 +153,9 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 
 	const listToRender = useMemo((): TTokenListItem[] | undefined => {
 		let list = undefined;
-		if (typeOfList === 'tokens') {
+		if (typeOfList === 'chains') {
+			list = networks;
+		} else if (typeOfList === 'tokens') {
 			list = tokens;
 		} else if (typeOfList === 'pools') {
 			list = pools;
@@ -167,7 +179,7 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 			return true;
 		});
 		return list;
-	}, [typeOfList, tokens, pools, network, search]);
+	}, [typeOfList, networks, tokens, pools, network, search]);
 
 	return (
 		<>
@@ -180,6 +192,16 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 					set_search={set_search}
 				/>
 				<menu className={'flex flex-row items-center text-xs md:mb-4 md:justify-end'}>
+					<button
+						onClick={(): void => set_typeOfList('chains')}
+						className={`transition-colors ${
+							typeOfList === 'chains'
+								? 'text-neutral-900'
+								: 'cursor-pointer text-neutral-900/60 hover:text-neutral-700'
+						}`}>
+						{'Chains'}
+					</button>
+					&nbsp;<p className={'text-neutral-900/60'}>{'/'}</p>&nbsp;
 					<button
 						onClick={(): void => set_typeOfList('tokens')}
 						className={`transition-colors ${

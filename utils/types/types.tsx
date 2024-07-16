@@ -6,6 +6,7 @@ export type TTokenListItem = {
 	timestamp: string;
 	logoURI: string;
 	URI: string;
+	generationMethod: string;
 	keywords: string[];
 	tokenCount: number;
 	metadata: {
@@ -30,5 +31,6 @@ export type TTokenListSummary = {
 	name: string;
 	timestamp: number;
 	logoURI: string;
+	generationMethod: string;
 	lists: TTokenListItem[];
 };
