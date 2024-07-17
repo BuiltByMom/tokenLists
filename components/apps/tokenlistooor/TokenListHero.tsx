@@ -125,11 +125,6 @@ function TokenListHero({summary}: {summary: TTokenListSummary | undefined}): Rea
 										'The next automatic update is just around the corner! Our lists are updated automatically with each new commit or every Sunday at midday, without any manual input.'
 									}
 								</p>
-								<p className={'text-neutral-500 pt-2 text-xs'}>
-									{
-										'The tokenlistooor.json is an automatically curated list of tokens that appear in at least 50% of the lists below, for a given chain, at the time of update.'
-									}
-								</p>
 							</div>
 						</div>
 					</div>

@@ -1,8 +1,10 @@
-import React, {useMemo, useState} from 'react';
+import React, {Fragment, useMemo, useState} from 'react';
 import {useRouter} from 'next/router';
 import {DefaultSeo} from 'next-seo';
 import LEGACY_TOKEN_LISTS from 'utils/legacyTokenLists';
 import * as chains from 'wagmi/chains';
+import axios from 'axios';
+import useSWR from 'swr';
 import {motion} from 'framer-motion';
 import TokenListCard, {LegacyTokenListCard} from '@tokenlistooor/TokenListCard';
 import TokenListHero from '@tokenlistooor/TokenListHero';
@@ -11,6 +13,8 @@ import type {Variants} from 'framer-motion';
 import type {ReactElement} from 'react';
 import type {TNDict} from '@builtbymom/web3/types';
 import type {TTokenListItem, TTokenListSummary} from '@utils/types/types';
+
+const fetcher = async (url: string): Promise<any> => axios.get(url).then(res => res.data);
 
 const variants = {
 	enter: (i: number): unknown => ({
@@ -101,20 +105,27 @@ export function Filters({
 	);
 }
 
-function Home({summary}: {summary: TTokenListSummary}): ReactElement {
-	const allLists = summary.lists;
-	const [typeOfList, set_typeOfList] = useState<'tokens' | 'pools' | 'chains' | 'legacy'>('chains');
+function Lists(): ReactElement {
+	const [typeOfList, set_typeOfList] = useState<'tokens' | 'pools' | 'chains' | 'statics' | 'legacy'>('chains');
 	const [search, set_search] = useState('');
-	const [network, set_network] = useState(-1);
+	const [currentNetwork, set_currentNetwork] = useState(-1);
+	const {data: summary} = useSWR<TTokenListSummary>(
+		'https://raw.githubusercontent.com/smoldapp/tokenLists/main/lists/summary.json',
+		fetcher
+	);
 
-	const {tokens, pools, networks} = useMemo((): {
+	const allLists = useMemo(() => summary?.lists || ([] as TTokenListItem[]), [summary]);
+
+	const {tokens, pools, networks, statics} = useMemo((): {
 		tokens: TTokenListItem[];
 		pools: TTokenListItem[];
 		networks: TTokenListItem[];
+		statics: TTokenListItem[];
 	} => {
 		const tokens: TTokenListItem[] = [];
 		const pools: TTokenListItem[] = [];
 		const networks: TTokenListItem[] = [];
+		const statics: TTokenListItem[] = [];
 		allLists.forEach((list: TTokenListItem): void => {
 			if (list.description.toLowerCase().includes('the most popular tokens on')) {
 				if (list.tokenCount === 0) {
@@ -123,12 +134,46 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 				networks.push(list);
 			} else if (list.name.toLowerCase().includes('token pool')) {
 				pools.push(list);
+			} else if (list.name.toLowerCase().includes('(static)')) {
+				statics.push(list);
 			} else {
 				tokens.push(list);
 			}
 		});
-		return {tokens, pools, networks};
+		return {tokens, pools, networks, statics};
 	}, [allLists]);
+
+	const listToRender = useMemo((): TTokenListItem[] | undefined => {
+		let list = undefined;
+		if (typeOfList === 'chains') {
+			list = networks;
+		} else if (typeOfList === 'tokens') {
+			list = tokens;
+		} else if (typeOfList === 'pools') {
+			list = pools;
+		} else if (typeOfList === 'statics') {
+			list = statics;
+		}
+		if (!list) {
+			return undefined;
+		}
+		//Filter by chainID
+		list = list.filter((item): boolean => {
+			if (currentNetwork !== -1) {
+				return item.metadata.supportedChains.includes(currentNetwork);
+			}
+			return true;
+		});
+
+		//Filter by search
+		list = list.filter((item): boolean => {
+			if (search) {
+				return item.name.toLowerCase().includes(search.toLowerCase());
+			}
+			return true;
+		});
+		return list;
+	}, [typeOfList, networks, tokens, pools, currentNetwork, statics, search]);
 
 	const allSupportedChains = useMemo((): chains.Chain[] => {
 		const supportedChains: chains.Chain[] = [];
@@ -151,44 +196,39 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 		return supportedChains;
 	}, [allLists]);
 
-	const listToRender = useMemo((): TTokenListItem[] | undefined => {
-		let list = undefined;
-		if (typeOfList === 'chains') {
-			list = networks;
-		} else if (typeOfList === 'tokens') {
-			list = tokens;
-		} else if (typeOfList === 'pools') {
-			list = pools;
-		}
-		if (!list) {
-			return undefined;
-		}
-		//Filter by chainID
-		list = list.filter((item): boolean => {
-			if (network !== -1) {
-				return item.metadata.supportedChains.includes(network);
-			}
-			return true;
-		});
-
-		//Filter by search
-		list = list.filter((item): boolean => {
-			if (search) {
-				return item.name.toLowerCase().includes(search.toLowerCase());
-			}
-			return true;
-		});
-		return list;
-	}, [typeOfList, networks, tokens, pools, network, search]);
-
 	return (
-		<>
+		<Fragment>
 			<TokenListHero summary={summary} />
-			<div className={'mx-auto mt-10 flex w-full max-w-5xl grid-cols-2 flex-col-reverse md:grid'}>
+			<div className={'mx-auto mb-10 grid w-full max-w-5xl'}>
+				<div className={'box-0 w-full p-4 md:p-6'}>
+					<h2 className={'pb-2 text-lg font-medium'}>
+						{'NEW! Automated Chain Lists: Always Fresh, Always Reliable!'}
+					</h2>
+					<div className={'text-sm leading-relaxed text-neutral-700'}>
+						<p>
+							{
+								'Every Sunday, Tokenlistooor performs a comprehensive update to ensure our token lists are up-to-date.'
+							}
+						</p>
+						<p>
+							{
+								'We check and update thousands of tokens from various sources, ensuring the data reflects the latest information.'
+							}
+						</p>
+						<p>
+							{'Tokens that appear in '}
+							<b>{'at least 50% of all sources'}</b>
+							{' are selected to create our Chain Lists.'}
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div className={'mx-auto mt-2 flex w-full max-w-5xl grid-cols-2 flex-col-reverse md:grid'}>
 				<Filters
 					allSupportedChains={allSupportedChains || ([] as chains.Chain[])}
-					network={network}
-					set_network={set_network}
+					network={currentNetwork}
+					set_network={set_currentNetwork}
 					set_search={set_search}
 				/>
 				<menu className={'flex flex-row items-center text-xs md:mb-4 md:justify-end'}>
@@ -209,7 +249,17 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 								? 'text-neutral-900'
 								: 'cursor-pointer text-neutral-900/60 hover:text-neutral-700'
 						}`}>
-						{'Tokens'}
+						{'Protocols'}
+					</button>
+					&nbsp;<p className={'text-neutral-900/60'}>{'/'}</p>&nbsp;
+					<button
+						onClick={(): void => set_typeOfList('statics')}
+						className={`transition-colors ${
+							typeOfList === 'statics'
+								? 'text-neutral-900'
+								: 'cursor-pointer text-neutral-900/60 hover:text-neutral-700'
+						}`}>
+						{'Statics'}
 					</button>
 					&nbsp;<p className={'text-neutral-900/60'}>{'/'}</p>&nbsp;
 					<button
@@ -233,6 +283,7 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 					</button>
 				</menu>
 			</div>
+
 			<div className={'mx-auto grid w-full max-w-5xl'}>
 				<div
 					id={'tokenlistooor'}
@@ -261,7 +312,7 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 										variants={variants as Variants}
 										className={'box-0 relative flex w-full pt-4 md:pt-6'}>
 										<TokenListCard
-											network={network}
+											network={currentNetwork}
 											item={tokenListItem}
 										/>
 									</motion.div>
@@ -269,11 +320,15 @@ function Home({summary}: {summary: TTokenListSummary}): ReactElement {
 							)}
 				</div>
 			</div>
-		</>
+		</Fragment>
 	);
 }
 
-export default function Wrapper({pageProps}: {pageProps: {summary: TTokenListSummary}}): ReactElement {
+function Home(): ReactElement {
+	return <Lists />;
+}
+
+export default function Wrapper(): ReactElement {
 	return (
 		<>
 			<DefaultSeo
@@ -305,25 +360,25 @@ export default function Wrapper({pageProps}: {pageProps: {summary: TTokenListSum
 					cardType: 'summary_large_image'
 				}}
 			/>
-			<Home summary={pageProps.summary} />
+			<Home />
 		</>
 	);
 }
 
-Wrapper.getInitialProps = async (): Promise<unknown> => {
-	try {
-		const shaRes = await fetch('https://api.github.com/repos/smoldapp/tokenlists/commits?sha=main&per_page=1');
-		const shaJson = await shaRes.json();
-		const gihubCallResponse = shaJson as [{sha: string}];
-		const [{sha}] = gihubCallResponse;
-		const listRes = await fetch(`https://raw.githubusercontent.com/smoldapp/tokenLists/${sha}/lists/summary.json`);
-		const tokenListResponse = await listRes.json();
+// Wrapper.getStaticProps = async (): Promise<unknown> => {
+// 	try {
+// 		const shaRes = await fetch('https://api.github.com/repos/smoldapp/tokenlists/commits?sha=main&per_page=1');
+// 		const shaJson = await shaRes.json();
+// 		const gihubCallResponse = shaJson as [{sha: string}];
+// 		const [{sha}] = gihubCallResponse;
+// 		const listRes = await fetch(`https://raw.githubusercontent.com/smoldapp/tokenLists/${sha}/lists/summary.json`);
+// 		const tokenListResponse = await listRes.json();
 
-		return {summary: tokenListResponse};
-	} catch (error) {
-		const listRes = await fetch('https://raw.githubusercontent.com/smoldapp/tokenLists/main/lists/summary.json');
-		const tokenListResponse = await listRes.json();
+// 		return {props: {summary: tokenListResponse}, revalidate: 86400};
+// 	} catch (error) {
+// 		const listRes = await fetch('https://raw.githubusercontent.com/smoldapp/tokenLists/main/lists/summary.json');
+// 		const tokenListResponse = await listRes.json();
 
-		return {summary: tokenListResponse};
-	}
-};
+// 		return {props: {summary: tokenListResponse}, revalidate: 86400};
+// 	}
+// };
