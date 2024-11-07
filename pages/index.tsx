@@ -364,21 +364,3 @@ export default function Wrapper(): ReactElement {
 		</>
 	);
 }
-
-// Wrapper.getStaticProps = async (): Promise<unknown> => {
-// 	try {
-// 		const shaRes = await fetch('https://api.github.com/repos/smoldapp/tokenlists/commits?sha=main&per_page=1');
-// 		const shaJson = await shaRes.json();
-// 		const gihubCallResponse = shaJson as [{sha: string}];
-// 		const [{sha}] = gihubCallResponse;
-// 		const listRes = await fetch(`https://raw.githubusercontent.com/smoldapp/tokenLists/${sha}/lists/summary.json`);
-// 		const tokenListResponse = await listRes.json();
-
-// 		return {props: {summary: tokenListResponse}, revalidate: 86400};
-// 	} catch (error) {
-// 		const listRes = await fetch('https://raw.githubusercontent.com/smoldapp/tokenLists/main/lists/summary.json');
-// 		const tokenListResponse = await listRes.json();
-
-// 		return {props: {summary: tokenListResponse}, revalidate: 86400};
-// 	}
-// };

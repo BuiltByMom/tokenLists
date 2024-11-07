@@ -34,14 +34,27 @@ const rari = defineChain({
 	blockExplorers: {
 		default: {
 			name: 'RARI chain explorer',
-			url: 'https://mainnet.explorer.rarichain.org/',
-			apiUrl: 'https://mainnet.explorer.rarichain.org/api'
+			url: 'https://mainnet.explorer.rarichain.org/'
+		}
+	}
+});
+
+/*************************************************************************************************
+ ** The SOLANA chain is not available on the Viem library, so we define it here manually.
+ *************************************************************************************************/
+const solana = defineChain({
+	id: 1151111081099710,
+	name: 'Solana',
+	nativeCurrency: {name: 'Solana', symbol: 'SOL', decimals: 9},
+	rpcUrls: {
+		default: {
+			http: ['https://api.mainnet-beta.solana.com']
 		}
 	},
-	contracts: {
-		multicall3: {
-			address: '0xb6D5B39F96d379569d47cC84024f3Cd78c5Ef651',
-			blockCreated: 0
+	blockExplorers: {
+		default: {
+			name: 'Solana Explorer',
+			url: 'https://solana.fm/'
 		}
 	}
 });
@@ -58,12 +71,11 @@ export const supportedNetworks = [
 	zkSync,
 	base,
 	arbitrum,
-	rari
+	rari,
+	solana
 ];
 export const supportedTestNetworks = [goerli, baseGoerli];
 export const networks = [...supportedNetworks, ...supportedTestNetworks];
-
-console.warn(indexedWagmiChains);
 
 export type TAppExtendedChain = TExtendedChain & {
 	safeApiUri?: string;
