@@ -3,11 +3,13 @@
 import React from 'react';
 import {SWRConfig} from 'swr';
 
-export function Providers({children}: {children: React.ReactNode}) {
+import type {ReactElement} from 'react';
+
+export function Providers({children}: {children: React.ReactNode}): ReactElement {
 	return (
 		<SWRConfig
 			value={{
-				fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
+				fetcher: async (resource, init) => fetch(resource, init).then(async res => res.json())
 			}}>
 			{children}
 		</SWRConfig>
