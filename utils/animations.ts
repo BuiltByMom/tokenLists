@@ -14,17 +14,4 @@ export const appWrapperVariants = {
 	exit: {scale: 0.9, opacity: 0, transition: out}
 };
 
-export function scrollToTargetAdjusted(element: HTMLElement): void {
-	const headerOffset = 32;
-	if (!element) {
-		return;
-	}
-	const elementPosition = element.getBoundingClientRect().top;
-	const offsetPosition = elementPosition + window.scrollY - headerOffset;
-	window.scrollTo({
-		top: Math.round(offsetPosition),
-		behavior: 'smooth'
-	});
-}
-
 export default thumbnailVariants;

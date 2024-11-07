@@ -29,7 +29,7 @@ function TokenListCard({item, network}: {item: TTokenListItem; network: number})
 						unoptimized
 						src={item.logoURI || ''}
 						altSrc={
-							(item.logoURI || '')?.startsWith('ipfs://')
+							(item.logoURI || '').startsWith('ipfs://')
 								? `https://ipfs.io/ipfs/${(item.logoURI || '').replace('ipfs://', '')}`
 								: item.logoURI || ''
 						}
@@ -56,7 +56,7 @@ function TokenListCard({item, network}: {item: TTokenListItem; network: number})
 					<div className={'flex flex-row items-center justify-between px-4 py-2 transition-colors md:px-6'}>
 						<small>{'Tokens '}</small>
 						<b suppressHydrationWarning>
-							{`${formatAmount(network === -1 ? item.tokenCount : item?.metadata?.tokenCountPerChain?.[network] || 0, 0, 0)}`}
+							{`${formatAmount(network === -1 ? item.tokenCount : item.metadata.tokenCountPerChain[network] || 0, 0, 0)}`}
 						</b>
 					</div>
 				</div>
@@ -98,9 +98,9 @@ function LegacyTokenListCard({item}: {item: Partial<TTokenListItem>}): ReactElem
 				<Image
 					unoptimized
 					src={
-						item?.logoURI?.startsWith('ipfs://')
+						item.logoURI?.startsWith('ipfs://')
 							? `https://ipfs.io/ipfs/${(item.logoURI || '').replace('ipfs://', '')}`
-							: item?.logoURI || ''
+							: item.logoURI || ''
 					}
 					width={36}
 					height={36}
@@ -121,7 +121,7 @@ function LegacyTokenListCard({item}: {item: Partial<TTokenListItem>}): ReactElem
 				<div className={'border-y border-dashed border-neutral-200'}>
 					<div className={'flex flex-row items-center justify-between px-4 py-2 transition-colors md:px-6'}>
 						<small>{'Last Update '}</small>
-						<b>{item?.timestamp ? dayjs().to(new Date(item.timestamp).valueOf()) : '-'}</b>
+						<b>{item.timestamp ? dayjs().to(new Date(item.timestamp).valueOf()) : '-'}</b>
 					</div>
 				</div>
 				<div className={'border-y border-dashed border-neutral-200'}>
