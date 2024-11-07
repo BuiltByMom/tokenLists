@@ -1,3 +1,5 @@
+'use client';
+
 import type {ReactElement, ReactNode} from 'react';
 
 export function EmptyListMessage({children}: {children: ReactNode}): ReactElement {

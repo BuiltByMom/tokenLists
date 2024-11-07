@@ -7,10 +7,10 @@ import relativeTime from 'dayjs/plugin/relativeTime.js';
 import weekday from 'dayjs/plugin/weekday.js';
 import {formatAmount} from '@builtbymom/web3/utils';
 
-import {ImageWithFallback} from '../../common/ImageWithFallback';
-
 import type {ReactElement} from 'react';
 import type {TTokenListItem} from '@utils/types/types';
+
+import {ImageWithFallback} from '@/app/components/ImageWithFallback';
 
 extend(relativeTime);
 extend(dayjsDuration);

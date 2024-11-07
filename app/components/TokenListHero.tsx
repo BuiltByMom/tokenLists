@@ -1,17 +1,20 @@
+'use client';
+
 import React from 'react';
 import {toast} from 'react-hot-toast';
 import Link from 'next/link';
-import {Button} from 'components/Primitives/Button';
 import dayjs, {extend} from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration.js';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
 import weekday from 'dayjs/plugin/weekday.js';
 import {useTimer} from 'hooks/useTimer';
 import {copyToClipboard} from '@builtbymom/web3/utils';
-import {IconSocialGithub} from '@icons/IconSocialGithub';
 
 import type {ReactElement} from 'react';
 import type {TTokenListSummary} from '@utils/types/types';
+
+import Button from '@/app/components/Button';
+import {IconSocialGithub} from '@/app/components/icons/IconSocialGithub';
 
 extend(relativeTime);
 extend(dayjsDuration);

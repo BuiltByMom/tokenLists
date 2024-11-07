@@ -1,11 +1,14 @@
+'use client';
+
 import {toast} from 'react-hot-toast';
 import {useDownloadFile} from 'hooks/useDownloadFile';
 import axios from 'axios';
-import {IconDownload} from '@icons/IconDownload';
 
 import type {AxiosResponse} from 'axios';
 import type {ReactElement} from 'react';
 import type {TAddress} from '@builtbymom/web3/types';
+
+import {IconDownload} from '@/app/components/icons/IconDownload';
 
 export type TDownloadAssetButtonProps = {
 	chainId: number;

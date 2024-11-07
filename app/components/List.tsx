@@ -1,9 +1,9 @@
+'use client';
+
 import React, {useMemo, useState} from 'react';
 import {toast} from 'react-hot-toast';
 import Link from 'next/link';
-import {useRouter} from 'next/router';
-import {DefaultSeo} from 'next-seo';
-import {Button} from 'components/Primitives/Button';
+import {useParams, useRouter} from 'next/navigation';
 import {extend} from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration.js';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
@@ -11,18 +11,20 @@ import weekday from 'dayjs/plugin/weekday.js';
 import * as chains from 'wagmi/chains';
 import {motion} from 'framer-motion';
 import {getNetwork} from '@builtbymom/web3/utils/wagmi';
-import {IconSocialGithub} from '@icons/IconSocialGithub';
 import {useMountEffect} from '@react-hookz/web';
-import {DownloadAssetButton} from '@tokenlistooor/DownloadAssetButton';
-import {EmptyListMessage} from '@common/EmptyListMessage';
-import {ImageWithFallback} from '@common/ImageWithFallback';
+
+import Button from './Button';
+import {IconSocialGithub} from './icons/IconSocialGithub';
 
 import type {Variants} from 'framer-motion';
-import type {GetServerSidePropsResult, NextPageContext} from 'next';
 import type {ReactElement} from 'react';
 import type {TNDict} from '@builtbymom/web3/types';
 import type {TExtendedChain} from '@builtbymom/web3/utils/wagmi';
 import type {TTokenListItem} from '@utils/types/types';
+
+import {DownloadAssetButton} from '@/app/components/DownloadAssetButton';
+import {EmptyListMessage} from '@/app/components/EmptyListMessage';
+import {ImageWithFallback} from '@/app/components/ImageWithFallback';
 
 extend(relativeTime);
 extend(dayjsDuration);
@@ -126,7 +128,7 @@ function TokenListHero({list}: {list: TTokenListItem}): ReactElement {
 }
 
 function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElement {
-	const router = useRouter();
+	const params = useParams();
 	const currentNetwork = useMemo((): TExtendedChain => {
 		try {
 			return getNetwork(item.chainId);
@@ -136,7 +138,7 @@ function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElemen
 	}, [item.chainId]);
 
 	const isLogoInAssetLists = (item.logoURI || '').includes('assets.smold.app');
-	const isSmolAssetsPage = router.query.list === 'smolAssets';
+	const isSmolAssetsPage = params.list === 'smolAssets';
 	const shouldDisplayDownloadButtons = isLogoInAssetLists && isSmolAssetsPage;
 
 	const downloadAssetCommonParams = {
@@ -208,18 +210,19 @@ function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElemen
 }
 
 function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
+	const params = useParams();
 	const router = useRouter();
 	const [currentPage, set_currentPage] = useState(1);
 	const [itemsPerPage] = useState(50);
 	const [search, set_search] = useState('');
 	const [network, set_network] = useState(-1);
 	useMountEffect((): void => {
-		const {query} = router;
-		if (query.page) {
-			set_currentPage(Number(query.page));
+		const {page, search} = params;
+		if (page) {
+			set_currentPage(Number(page));
 		}
-		if (query.search) {
-			set_search(String(query.search));
+		if (search) {
+			set_search(String(search));
 		}
 	});
 
@@ -263,7 +266,7 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 	}, [list.tokens, search, network]);
 
 	const isSearchResultEmpty = searchResult.length === 0;
-	const isSmolAssetsPage = router.query.list === 'smolAssets';
+	const isSmolAssetsPage = params.list === 'smolAssets';
 	const emptyListMessage = "Oh no! Looks like we don't have that token in stock.";
 	const smolEmptyListMessage = (
 		<span>
@@ -294,16 +297,11 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 							set_search(e.target.value || '');
 							set_currentPage(1);
 							if (!e.target.value) {
-								const {search, ...queryNoSearch} = router.query;
+								const {search, ...queryNoSearch} = params;
 								search;
-								router.push({query: queryNoSearch});
+								router.push(`/${queryNoSearch}`);
 							} else {
-								router.push({
-									query: {
-										...router.query,
-										search: e.target.value
-									}
-								});
+								router.push(`/${params.toString()}&search=${e.target.value}`);
 							}
 						}}
 					/>
@@ -318,16 +316,11 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 							set_network(Number(e.target.value));
 							set_currentPage(1);
 							if (Number(e.target.value) === -1) {
-								const {network, ...queryNoNetwork} = router.query;
+								const {network, ...queryNoNetwork} = params;
 								network;
-								router.push({query: queryNoNetwork});
+								router.push(`/${queryNoNetwork}`);
 							} else {
-								router.push({
-									query: {
-										...router.query,
-										network: e.target.value
-									}
-								});
+								router.push(`/${params.toString()}&network=${e.target.value}`);
 							}
 						}}>
 						<option value={-1}>{'All Networks'}</option>
@@ -381,12 +374,7 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 							onClick={(): void => {
 								set_currentPage(1);
 								window.scrollTo({top: 0, behavior: 'smooth'});
-								router.push({
-									query: {
-										...router.query,
-										page: 1
-									}
-								});
+								router.push(`/${params.toString()}&page=1`);
 							}}>
 							{'◁◁ '}
 						</button>
@@ -402,12 +390,7 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 								onClick={(): void => {
 									set_currentPage(currentPage - 1);
 									window.scrollTo({top: 0, behavior: 'smooth'});
-									router.push({
-										query: {
-											...router.query,
-											page: currentPage - 1
-										}
-									});
+									router.push(`/${params.toString()}&page=${currentPage - 1}`);
 								}}>
 								{'◁ Previous'}
 							</button>
@@ -433,12 +416,7 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 								onClick={(): void => {
 									set_currentPage(currentPage + 1);
 									window.scrollTo({top: 0, behavior: 'smooth'});
-									router.push({
-										query: {
-											...router.query,
-											page: currentPage + 1
-										}
-									});
+									router.push(`/${params.toString()}&page=${currentPage + 1}`);
 								}}>
 								{'Next ▷'}
 							</button>
@@ -456,12 +434,9 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 							onClick={(): void => {
 								set_currentPage(Math.ceil(searchResult.length / itemsPerPage));
 								window.scrollTo({top: 0, behavior: 'smooth'});
-								router.push({
-									query: {
-										...router.query,
-										page: Math.ceil(searchResult.length / itemsPerPage)
-									}
-								});
+								router.push(
+									`/${params.toString()}&page=${Math.ceil(searchResult.length / itemsPerPage)}`
+								);
 							}}>
 							{' ▷▷'}
 						</button>
@@ -480,71 +455,4 @@ function List({list}: {list: TTokenListItem}): ReactElement {
 		</>
 	);
 }
-
-export default function Wrapper({pageProps}: {pageProps: {list: TTokenListItem}}): ReactElement {
-	return (
-		<>
-			<DefaultSeo
-				title={`${pageProps.list.name} tokenList - SmolDapp`}
-				defaultTitle={`${pageProps.list.name} tokenList - SmolDapp`}
-				description={pageProps.list.description}
-				openGraph={{
-					type: 'website',
-					locale: 'en-US',
-					url: 'https://smold.app/tokenlistooor',
-					site_name: `${pageProps.list.name} tokenList - SmolDapp`,
-					title: `${pageProps.list.name} tokenList - SmolDapp`,
-					description: pageProps.list.description,
-					images: [
-						{
-							url: 'https://smold.app/og_tokenlistooor.png',
-							width: 800,
-							height: 400,
-							alt: 'tokenListooor'
-						}
-					]
-				}}
-				twitter={{
-					handle: '@smoldapp',
-					site: '@smoldapp',
-					cardType: 'summary_large_image'
-				}}
-			/>
-			<List list={pageProps.list} />
-		</>
-	);
-}
-
-export const getServerSideProps = async (
-	context: NextPageContext
-): Promise<GetServerSidePropsResult<{list: TTokenListItem}>> => {
-	const listID = context.query.list;
-	if (!listID) {
-		return {
-			redirect: {
-				permanent: false,
-				destination: '/tokenlistooor'
-			}
-		};
-	}
-	try {
-		const listRes = await fetch(`https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/${listID}.json`);
-		const tokenListResponse = (await listRes.json()) as TTokenListItem;
-		return {
-			props: {
-				list: {
-					...tokenListResponse,
-					URI: `https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/${listID}.json`
-				}
-			}
-		};
-	} catch (e) {
-		console.error(e);
-		return {
-			redirect: {
-				permanent: false,
-				destination: '/tokenlistooor'
-			}
-		};
-	}
-};
+export default List;

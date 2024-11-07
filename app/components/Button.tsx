@@ -1,8 +1,11 @@
-import React, {forwardRef} from 'react';
-import {cl} from '@builtbymom/web3/utils';
-import {IconSpinner} from '@icons/IconSpinner';
+'use client';
 
-import type {ComponentPropsWithoutRef, ForwardedRef, MouseEvent, ReactElement, ReactNode} from 'react';
+import React from 'react';
+import {cl} from '@builtbymom/web3/utils';
+
+import type {ComponentPropsWithoutRef, MouseEvent, ReactElement, ReactNode} from 'react';
+
+import {IconSpinner} from '@/app/components/icons/IconSpinner';
 
 export type TButtonVariant = 'filled' | 'outlined' | 'light' | 'inherit' | string;
 
@@ -16,7 +19,7 @@ export type TButton = {
 
 export type TMouseEvent = MouseEvent<HTMLButtonElement> & MouseEvent<HTMLAnchorElement>;
 
-export const Button = forwardRef((props: TButton, ref: ForwardedRef<HTMLButtonElement | null>): ReactElement => {
+function Button(props: TButton): ReactElement {
 	const {
 		children,
 		variant = 'filled',
@@ -29,7 +32,6 @@ export const Button = forwardRef((props: TButton, ref: ForwardedRef<HTMLButtonEl
 	return (
 		<button
 			{...(rest as ComponentPropsWithoutRef<'button'>)}
-			ref={ref}
 			data-variant={variant}
 			className={cl('button', rest.className)}
 			aria-busy={isBusy}
@@ -50,6 +52,6 @@ export const Button = forwardRef((props: TButton, ref: ForwardedRef<HTMLButtonEl
 			) : null}
 		</button>
 	);
-});
+}
 
-Button.displayName = 'Button';
+export default Button;

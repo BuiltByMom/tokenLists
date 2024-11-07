@@ -1,18 +1,21 @@
+'use client';
+
 import React, {Fragment, useMemo, useState} from 'react';
-import {useRouter} from 'next/router';
-import {DefaultSeo} from 'next-seo';
-import LEGACY_TOKEN_LISTS from 'utils/legacyTokenLists';
+import {useParams, useRouter} from 'next/navigation';
 import * as chains from 'wagmi/chains';
 import axios from 'axios';
 import useSWR from 'swr';
 import {motion} from 'framer-motion';
-import TokenListCard, {LegacyTokenListCard} from '@tokenlistooor/TokenListCard';
-import TokenListHero from '@tokenlistooor/TokenListHero';
+
+import TokenListCard, {LegacyTokenListCard} from './TokenListCard';
 
 import type {Variants} from 'framer-motion';
 import type {ReactElement} from 'react';
 import type {TNDict} from '@builtbymom/web3/types';
-import type {TTokenListItem, TTokenListSummary} from '@utils/types/types';
+import type {TTokenListItem, TTokenListSummary} from '@/utils/types/types';
+
+import TokenListHero from '@/app/components/TokenListHero';
+import LEGACY_TOKEN_LISTS from '@/utils/legacyTokenLists';
 
 const fetcher = async (url: string): Promise<any> => axios.get(url).then(res => res.data);
 
@@ -40,6 +43,7 @@ export function Filters({
 	set_search: (value: string) => void;
 	set_network: (value: number) => void;
 }): ReactElement {
+	const params = useParams();
 	const router = useRouter();
 
 	return (
@@ -54,16 +58,11 @@ export function Filters({
 					onChange={(e): void => {
 						set_search(e.target.value || '');
 						if (!e.target.value) {
-							const {search, ...queryNoSearch} = router.query;
+							const {search, ...queryNoSearch} = params;
 							search;
-							router.push({query: queryNoSearch});
+							router.push(`/${queryNoSearch}`);
 						} else {
-							router.push({
-								query: {
-									...router.query,
-									search: e.target.value
-								}
-							});
+							router.push(`/${params.toString()}&search=${e.target.value}`);
 						}
 					}}
 				/>
@@ -77,16 +76,11 @@ export function Filters({
 					onChange={(e): void => {
 						set_network(Number(e.target.value));
 						if (Number(e.target.value) === -1) {
-							const {network, ...queryNoNetwork} = router.query;
+							const {network, ...queryNoNetwork} = params;
 							network;
-							router.push({query: queryNoNetwork});
+							router.push(`/${queryNoNetwork}`);
 						} else {
-							router.push({
-								query: {
-									...router.query,
-									network: e.target.value
-								}
-							});
+							router.push(`/${params.toString()}&network=${e.target.value}`);
 						}
 					}}>
 					<option value={-1}>{'All Networks'}</option>
@@ -321,44 +315,4 @@ function Lists(): ReactElement {
 		</Fragment>
 	);
 }
-
-function Home(): ReactElement {
-	return <Lists />;
-}
-
-export default function Wrapper(): ReactElement {
-	return (
-		<>
-			<DefaultSeo
-				title={'Tokenlistooor - SmolDapp'}
-				defaultTitle={'Tokenlistooor - SmolDapp'}
-				description={
-					'Up to date token lists that fulfill your needs! Tokenlistooor is a fork of Uniswap Tokenlists, with focus on adding more automation and extra features.'
-				}
-				openGraph={{
-					type: 'website',
-					locale: 'en-US',
-					url: 'https://smold.app/tokenlistooor',
-					site_name: 'Tokenlistooor - SmolDapp',
-					title: 'Tokenlistooor - SmolDapp',
-					description:
-						'Up to date token lists that fulfill your needs! Tokenlistooor is a fork of Uniswap Tokenlists, with focus on adding more automation and extra features.',
-					images: [
-						{
-							url: 'https://smold.app/og_tokenlistooor.png',
-							width: 800,
-							height: 400,
-							alt: 'tokenListooor'
-						}
-					]
-				}}
-				twitter={{
-					handle: '@smoldapp',
-					site: '@smoldapp',
-					cardType: 'summary_large_image'
-				}}
-			/>
-			<Home />
-		</>
-	);
-}
+export default Lists;
