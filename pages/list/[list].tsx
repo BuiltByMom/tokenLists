@@ -75,12 +75,12 @@ function TokenListHero({list}: {list: TTokenListItem}): ReactElement {
 						<ImageWithFallback
 							unoptimized
 							src={
-								list.logoURI?.startsWith('ipfs://')
+								list.logoURI.startsWith('ipfs://')
 									? `https://ipfs.io/ipfs/${list.logoURI.replace('ipfs://', '')}`
 									: list.logoURI
 							}
 							altSrc={
-								list.logoURI?.startsWith('ipfs://')
+								list.logoURI.startsWith('ipfs://')
 									? `https://ipfs.io/ipfs/${list.logoURI.replace('ipfs://', '')}`
 									: list.logoURI
 							}
@@ -169,7 +169,7 @@ function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElemen
 						<span>
 							<a
 								href={`${
-									currentNetwork?.blockExplorers?.etherscan?.url || 'https://etherscan.io'
+									currentNetwork.blockExplorers?.etherscan?.url || 'https://etherscan.io'
 								}/token/${item.address}`}
 								target={'_blank'}
 								rel={'noreferrer'}
@@ -200,7 +200,7 @@ function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElemen
 			<div className={'col-span-12 flex justify-end text-right md:col-span-2'}>
 				<div>
 					<p className={'block text-xxs text-neutral-700 md:text-xs'}>{'Chain'}</p>
-					<b>{currentNetwork?.name || `Chain ${item.chainId}`}</b>
+					<b>{currentNetwork.name || `Chain ${item.chainId}`}</b>
 				</div>
 			</div>
 		</div>
@@ -215,10 +215,10 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 	const [network, set_network] = useState(-1);
 	useMountEffect((): void => {
 		const {query} = router;
-		if (query?.page) {
+		if (query.page) {
 			set_currentPage(Number(query.page));
 		}
-		if (query?.search) {
+		if (query.search) {
 			set_search(String(query.search));
 		}
 	});
@@ -226,7 +226,7 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 	const availableNetworks = useMemo((): {value: number; label: string}[] => {
 		const networks: {value: number; label: string}[] = [];
 		const exists: TNDict<boolean> = {};
-		([...list.tokens] || []).forEach((item): void => {
+		list.tokens.forEach((item): void => {
 			const network = Object.values(chains).find((network): boolean => network.id === item.chainId);
 			if (network) {
 				if (exists[network.id]) {
@@ -243,7 +243,7 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 	}, [list.tokens]);
 
 	const searchResult = useMemo((): TTokenListItem['tokens'] => {
-		return ([...list.tokens] || [])
+		return list.tokens
 			.filter((item): boolean => {
 				if (network === -1) {
 					return true;
@@ -518,7 +518,7 @@ export default function Wrapper({pageProps}: {pageProps: {list: TTokenListItem}}
 export const getServerSideProps = async (
 	context: NextPageContext
 ): Promise<GetServerSidePropsResult<{list: TTokenListItem}>> => {
-	const listID = context?.query?.list;
+	const listID = context.query.list;
 	if (!listID) {
 		return {
 			redirect: {
