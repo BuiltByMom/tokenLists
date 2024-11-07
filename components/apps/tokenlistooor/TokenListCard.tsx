@@ -98,7 +98,7 @@ function LegacyTokenListCard({item}: {item: Partial<TTokenListItem>}): ReactElem
 				<Image
 					unoptimized
 					src={
-						item.logoURI?.startsWith('ipfs://')
+						(item.logoURI || '').startsWith('ipfs://')
 							? `https://ipfs.io/ipfs/${(item.logoURI || '').replace('ipfs://', '')}`
 							: item.logoURI || ''
 					}

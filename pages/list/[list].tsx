@@ -75,12 +75,12 @@ function TokenListHero({list}: {list: TTokenListItem}): ReactElement {
 						<ImageWithFallback
 							unoptimized
 							src={
-								list.logoURI.startsWith('ipfs://')
+								(list.logoURI || '').startsWith('ipfs://')
 									? `https://ipfs.io/ipfs/${list.logoURI.replace('ipfs://', '')}`
 									: list.logoURI
 							}
 							altSrc={
-								list.logoURI.startsWith('ipfs://')
+								(list.logoURI || '').startsWith('ipfs://')
 									? `https://ipfs.io/ipfs/${list.logoURI.replace('ipfs://', '')}`
 									: list.logoURI
 							}
@@ -255,9 +255,9 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 					return true;
 				}
 				return (
-					item.name.toLowerCase().startsWith(search.toLowerCase()) ||
-					item.symbol.toLowerCase().startsWith(search.toLowerCase()) ||
-					item.address.toLowerCase().startsWith(search.toLowerCase())
+					(item.name || '').toLowerCase().startsWith(search.toLowerCase()) ||
+					(item.symbol || '').toLowerCase().startsWith(search.toLowerCase()) ||
+					((item.address as string) || '').toLowerCase().startsWith(search.toLowerCase())
 				);
 			});
 	}, [list.tokens, search, network]);
