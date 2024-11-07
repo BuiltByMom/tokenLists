@@ -3,11 +3,7 @@ import type {TTokenListItem} from '@/utils/types/types';
 
 import List from '@/app/components/List';
 
-type TProps = {
-	params: {list: string};
-};
-
-export async function generateMetadata({params}: TProps): Promise<Metadata> {
+export async function generateMetadata({params}: any): Promise<Metadata> {
 	try {
 		const list = (await fetch(
 			`https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/${params.list}.json`
@@ -59,7 +55,7 @@ async function getList(listId: string): Promise<TTokenListItem | null> {
 	}
 }
 
-export default async function ListPage({params}: TProps): Promise<unknown> {
+export default async function ListPage({params}: any): Promise<unknown> {
 	const list = await getList(params.list);
 
 	if (!list) {
