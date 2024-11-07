@@ -84,7 +84,7 @@ export type TAppExtendedChain = TExtendedChain & {
 	};
 };
 for (const chain of Object.values(indexedWagmiChains)) {
-	if (!chain || typeof chain !== 'object' || !chain.id) {
+	if (typeof chain !== 'object' || !chain.id) {
 		continue;
 	}
 	const extendedChain = chain as TAppExtendedChain;
