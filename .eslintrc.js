@@ -133,6 +133,7 @@ module.exports = {
 		],
 		'@typescript-eslint/no-misused-promises': ['error', {checksConditionals: true, checksVoidReturn: false}],
 		'@typescript-eslint/no-non-null-asserted-nullish-coalescing': 'error',
+		'@typescript-eslint/no-unnecessary-condition': 0,
 		'@typescript-eslint/no-unnecessary-qualifier': 'error',
 		'@typescript-eslint/no-unnecessary-type-arguments': 'error',
 		'@typescript-eslint/no-unnecessary-boolean-literal-compare': [
