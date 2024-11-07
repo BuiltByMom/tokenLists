@@ -185,9 +185,7 @@ function Lists(): ReactElement {
 					return;
 				}
 				exists[chainId] = true;
-				const matchingChain = Object.values(chains).find(
-					(chain): boolean => chain.id === chainId
-				) as chains.Chain;
+				const matchingChain = Object.values(chains).find((chain): boolean => chain.id === chainId);
 				if (matchingChain) {
 					supportedChains.push(matchingChain);
 				}
@@ -226,7 +224,7 @@ function Lists(): ReactElement {
 
 			<div className={'mx-auto mt-2 flex w-full max-w-5xl grid-cols-2 flex-col-reverse md:grid'}>
 				<Filters
-					allSupportedChains={allSupportedChains || ([] as chains.Chain[])}
+					allSupportedChains={allSupportedChains}
 					network={currentNetwork}
 					set_network={set_currentNetwork}
 					set_search={set_search}
@@ -289,7 +287,7 @@ function Lists(): ReactElement {
 					id={'tokenlistooor'}
 					className={'grid grid-cols-1 gap-6 pb-32 md:grid-cols-3'}>
 					{typeOfList === 'legacy'
-						? (LEGACY_TOKEN_LISTS || []).map(
+						? LEGACY_TOKEN_LISTS.map(
 								(tokenListItem, i): ReactElement => (
 									<motion.div
 										key={tokenListItem.name}
