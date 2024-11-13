@@ -55,8 +55,8 @@ async function getList(listId: string): Promise<TTokenListItem | null> {
 	}
 }
 
-export default async function ListPage({params}: any): Promise<unknown> {
-	const list = await getList(params.list);
+export default async function ListPage({params}: {params: {list: string}}): Promise<unknown> {
+	const list = await getList(await params.list);
 
 	if (!list) {
 		return {

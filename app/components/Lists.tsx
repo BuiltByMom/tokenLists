@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import {motion} from 'framer-motion';
 
 import TokenListCard, {LegacyTokenListCard} from './TokenListCard';
+import {ViewToggle} from './ViewToggle';
 
 import type {Variants} from 'framer-motion';
 import type {ReactElement} from 'react';
@@ -15,6 +16,7 @@ import type {TNDict} from '@builtbymom/web3/types';
 import type {TTokenListItem, TTokenListSummary} from '@/utils/types/types';
 
 import TokenListHero from '@/app/components/TokenListHero';
+import {TokenListTable} from '@/app/components/TokenListTable';
 import LEGACY_TOKEN_LISTS from '@/utils/legacyTokenLists';
 
 const fetcher = async (url: string): Promise<any> => axios.get(url).then(res => res.data);
@@ -101,6 +103,7 @@ export function Filters({
 
 function Lists(): ReactElement {
 	const [typeOfList, set_typeOfList] = useState<'tokens' | 'pools' | 'chains' | 'statics' | 'legacy'>('chains');
+	const [viewMode, set_viewMode] = useState<'grid' | 'list'>('grid');
 	const [search, set_search] = useState('');
 	const [currentNetwork, set_currentNetwork] = useState(-1);
 	const {data: summary} = useSWR<TTokenListSummary>(
@@ -217,12 +220,18 @@ function Lists(): ReactElement {
 			</div>
 
 			<div className={'mx-auto mt-2 flex w-full max-w-5xl grid-cols-2 flex-col-reverse md:grid'}>
-				<Filters
-					allSupportedChains={allSupportedChains}
-					network={currentNetwork}
-					set_network={set_currentNetwork}
-					set_search={set_search}
-				/>
+				<div className={'flex flex-row items-center'}>
+					<Filters
+						allSupportedChains={allSupportedChains}
+						network={currentNetwork}
+						set_network={set_currentNetwork}
+						set_search={set_search}
+					/>
+					<ViewToggle
+						currentView={viewMode}
+						onViewChange={set_viewMode}
+					/>
+				</div>
 				<menu className={'flex flex-row items-center text-xs md:mb-4 md:justify-end'}>
 					<button
 						onClick={(): void => set_typeOfList('chains')}
@@ -277,40 +286,45 @@ function Lists(): ReactElement {
 			</div>
 
 			<div className={'mx-auto grid w-full max-w-5xl'}>
-				<div
-					id={'tokenlistooor'}
-					className={'grid grid-cols-1 gap-6 pb-32 md:grid-cols-3'}>
-					{typeOfList === 'legacy'
-						? LEGACY_TOKEN_LISTS.map(
-								(tokenListItem, i): ReactElement => (
-									<motion.div
-										key={tokenListItem.name}
-										custom={i}
-										initial={'initial'}
-										whileInView={'enter'}
-										variants={variants as Variants}
-										className={'box-0 relative flex w-full pt-4 md:pt-6'}>
-										<LegacyTokenListCard item={tokenListItem} />
-									</motion.div>
+				{viewMode === 'grid' ? (
+					<div className={'grid grid-cols-1 gap-6 pb-32 md:grid-cols-3'}>
+						{typeOfList === 'legacy'
+							? LEGACY_TOKEN_LISTS.map(
+									(tokenListItem, i): ReactElement => (
+										<motion.div
+											key={tokenListItem.name}
+											custom={i}
+											initial={'initial'}
+											whileInView={'enter'}
+											variants={variants as Variants}
+											className={'box-0 relative flex w-full pt-4 md:pt-6'}>
+											<LegacyTokenListCard item={tokenListItem} />
+										</motion.div>
+									)
 								)
-							)
-						: (listToRender || []).map(
-								(tokenListItem: TTokenListItem, i: number): ReactElement => (
-									<motion.div
-										key={tokenListItem.name}
-										custom={i}
-										initial={'initial'}
-										whileInView={'enter'}
-										variants={variants as Variants}
-										className={'box-0 relative flex w-full pt-4 md:pt-6'}>
-										<TokenListCard
-											network={currentNetwork}
-											item={tokenListItem}
-										/>
-									</motion.div>
-								)
-							)}
-				</div>
+							: (listToRender || []).map(
+									(tokenListItem: TTokenListItem, i: number): ReactElement => (
+										<motion.div
+											key={tokenListItem.name}
+											custom={i}
+											initial={'initial'}
+											whileInView={'enter'}
+											variants={variants as Variants}
+											className={'box-0 relative flex w-full pt-4 md:pt-6'}>
+											<TokenListCard
+												network={currentNetwork}
+												item={tokenListItem}
+											/>
+										</motion.div>
+									)
+								)}
+					</div>
+				) : (
+					<TokenListTable
+						items={listToRender || []}
+						network={currentNetwork}
+					/>
+				)}
 			</div>
 		</Fragment>
 	);
