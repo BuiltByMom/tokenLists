@@ -1,7 +1,7 @@
 'use client';
 
 import React, {Fragment, useMemo, useState} from 'react';
-import {useParams, useRouter} from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import * as chains from 'wagmi/chains';
 import axios from 'axios';
 import useSWR from 'swr';
@@ -45,7 +45,6 @@ export function Filters({
 	set_search: (value: string) => void;
 	set_network: (value: number) => void;
 }): ReactElement {
-	const params = useParams();
 	const router = useRouter();
 
 	return (
@@ -59,13 +58,18 @@ export function Filters({
 					placeholder={'Search'}
 					onChange={(e): void => {
 						set_search(e.target.value || '');
+						const searchParams = new URLSearchParams(window.location.search);
+
 						if (!e.target.value) {
-							const {search, ...queryNoSearch} = params;
-							search;
-							router.push(`/${queryNoSearch}`);
+							searchParams.delete('search');
 						} else {
-							router.push(`/${params.toString()}&search=${e.target.value}`);
+							searchParams.set('search', e.target.value);
 						}
+
+						const newSearch = searchParams.toString();
+						const currentPath = window.location.pathname;
+						const newPath = newSearch ? `${currentPath}?${newSearch}` : currentPath;
+						router.push(newPath);
 					}}
 				/>
 			</div>
@@ -76,14 +80,21 @@ export function Filters({
 					}
 					value={network}
 					onChange={(e): void => {
-						set_network(Number(e.target.value));
-						if (Number(e.target.value) === -1) {
-							const {network, ...queryNoNetwork} = params;
-							network;
-							router.push(`/${queryNoNetwork}`);
+						const newNetwork = Number(e.target.value);
+						set_network(newNetwork);
+
+						const searchParams = new URLSearchParams(window.location.search);
+
+						if (newNetwork === -1) {
+							searchParams.delete('network');
 						} else {
-							router.push(`/${params.toString()}&network=${e.target.value}`);
+							searchParams.set('network', newNetwork.toString());
 						}
+
+						const newSearch = searchParams.toString();
+						const currentPath = window.location.pathname;
+						const newPath = newSearch ? `${currentPath}?${newSearch}` : currentPath;
+						router.push(newPath);
 					}}>
 					<option value={-1}>{'All Networks'}</option>
 					{allSupportedChains.map(

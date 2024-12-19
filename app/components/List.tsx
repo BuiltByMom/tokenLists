@@ -296,13 +296,19 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 						onChange={(e): void => {
 							set_search(e.target.value || '');
 							set_currentPage(1);
+
+							const searchParams = new URLSearchParams(window.location.search);
+
 							if (!e.target.value) {
-								const {search, ...queryNoSearch} = params;
-								search;
-								router.push(`/${queryNoSearch}`);
+								searchParams.delete('search');
 							} else {
-								router.push(`/${params.toString()}&search=${e.target.value}`);
+								searchParams.set('search', e.target.value);
 							}
+
+							const newSearch = searchParams.toString();
+							const currentPath = window.location.pathname;
+							const newPath = newSearch ? `${currentPath}?${newSearch}` : currentPath;
+							router.push(newPath);
 						}}
 					/>
 				</div>
@@ -313,15 +319,22 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 						}
 						value={network}
 						onChange={(e): void => {
-							set_network(Number(e.target.value));
+							const newNetwork = Number(e.target.value);
+							set_network(newNetwork);
 							set_currentPage(1);
-							if (Number(e.target.value) === -1) {
-								const {network, ...queryNoNetwork} = params;
-								network;
-								router.push(`/${queryNoNetwork}`);
+
+							const searchParams = new URLSearchParams(window.location.search);
+
+							if (newNetwork === -1) {
+								searchParams.delete('network');
 							} else {
-								router.push(`/${params.toString()}&network=${e.target.value}`);
+								searchParams.set('network', newNetwork.toString());
 							}
+
+							const newSearch = searchParams.toString();
+							const currentPath = window.location.pathname;
+							const newPath = newSearch ? `${currentPath}?${newSearch}` : currentPath;
+							router.push(newPath);
 						}}>
 						<option value={-1}>{'All Networks'}</option>
 						{availableNetworks.map(
