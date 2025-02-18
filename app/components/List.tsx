@@ -3,7 +3,7 @@
 import React, {useMemo, useState} from 'react';
 import {toast} from 'react-hot-toast';
 import Link from 'next/link';
-import {useParams, useRouter} from 'next/navigation';
+import {useParams, usePathname, useRouter} from 'next/navigation';
 import {extend} from 'dayjs';
 import dayjsDuration from 'dayjs/plugin/duration.js';
 import relativeTime from 'dayjs/plugin/relativeTime.js';
@@ -212,6 +212,7 @@ function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElemen
 function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 	const params = useParams();
 	const router = useRouter();
+	const pathname = usePathname();
 	const [currentPage, set_currentPage] = useState(1);
 	const [itemsPerPage] = useState(50);
 	const [search, set_search] = useState('');
@@ -403,7 +404,9 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 								onClick={(): void => {
 									set_currentPage(currentPage - 1);
 									window.scrollTo({top: 0, behavior: 'smooth'});
-									router.push(`/${params.toString()}&page=${currentPage - 1}`);
+									const params = new URLSearchParams(window.location.search);
+									params.set('page', (currentPage - 1).toString());
+									router.push(pathname + '?' + params.toString());
 								}}>
 								{'◁ Previous'}
 							</button>
@@ -429,7 +432,9 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 								onClick={(): void => {
 									set_currentPage(currentPage + 1);
 									window.scrollTo({top: 0, behavior: 'smooth'});
-									router.push(`/${params.toString()}&page=${currentPage + 1}`);
+									const params = new URLSearchParams(window.location.search);
+									params.set('page', (currentPage + 1).toString());
+									router.push(pathname + '?' + params.toString());
 								}}>
 								{'Next ▷'}
 							</button>
@@ -447,9 +452,9 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 							onClick={(): void => {
 								set_currentPage(Math.ceil(searchResult.length / itemsPerPage));
 								window.scrollTo({top: 0, behavior: 'smooth'});
-								router.push(
-									`/${params.toString()}&page=${Math.ceil(searchResult.length / itemsPerPage)}`
-								);
+								const params = new URLSearchParams(window.location.search);
+								params.set('page', Math.ceil(searchResult.length / itemsPerPage).toString());
+								router.push(pathname + '?' + params.toString());
 							}}>
 							{' ▷▷'}
 						</button>

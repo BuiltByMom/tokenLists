@@ -4,8 +4,8 @@ import type {TTokenListItem} from '@/utils/types/types';
 import List from '@/app/components/List';
 
 export async function generateMetadata(props: any): Promise<Metadata> {
-    const params = await props.params;
-    try {
+	const params = await props.params;
+	try {
 		const list = (await fetch(
 			`https://raw.githubusercontent.com/SmolDapp/tokenLists/main/lists/${params.list}.json`
 		).then(async res => res.json())) as TTokenListItem;
@@ -57,10 +57,14 @@ async function getList(listId: string): Promise<TTokenListItem | null> {
 }
 
 export default async function ListPage(props: {params: Promise<{list: string}>}): Promise<unknown> {
-    const params = await props.params;
-    const list = await getList(await params.list);
+	const params = await props.params;
+	let listName = await params.list;
+	if (listName === 'smolassets') {
+		listName = 'smolAssets';
+	}
+	const list = await getList(listName);
 
-    if (!list) {
+	if (!list) {
 		return {
 			redirect: {
 				destination: '/',
@@ -69,5 +73,5 @@ export default async function ListPage(props: {params: Promise<{list: string}>})
 		};
 	}
 
-    return <List list={list} />;
+	return <List list={list} />;
 }
