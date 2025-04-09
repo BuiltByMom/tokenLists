@@ -62,6 +62,9 @@ export default async function ListPage(props: {params: Promise<{list: string}>})
 	if (listName === 'smolassets') {
 		listName = 'smolAssets';
 	}
+	if (listName === 'tokenregistry') {
+		listName = 'tokenRegistry';
+	}
 	const list = await getList(listName);
 
 	if (!list) {

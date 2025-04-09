@@ -157,7 +157,11 @@ function TokenListItem({item}: {item: TTokenListItem['tokens'][0]}): ReactElemen
 					height={40}
 					quality={90}
 					unoptimized
-					src={item.logoURI || ''}
+					src={
+						(item.logoURI || '').startsWith('ipfs://')
+							? `https://ipfs.io/ipfs/${item.logoURI.replace('ipfs://', '')}`
+							: item.logoURI
+					}
 				/>
 				<div>
 					<p className={'text-sm'}>
@@ -388,7 +392,9 @@ function TokenListContent({list}: {list: TTokenListItem}): ReactElement {
 							onClick={(): void => {
 								set_currentPage(1);
 								window.scrollTo({top: 0, behavior: 'smooth'});
-								router.push(`/${params.toString()}&page=1`);
+								const params = new URLSearchParams(window.location.search);
+								params.set('page', '1');
+								router.push(pathname + '?' + params.toString());
 							}}>
 							{'◁◁ '}
 						</button>
