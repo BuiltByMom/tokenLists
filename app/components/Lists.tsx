@@ -232,7 +232,7 @@ function Lists(): ReactElement {
 							</div>
 							<div className={'mt-6 flex w-full justify-center'}>
 								<Link
-									href={'https://tokenregistry.builtby.mom/'}
+									href={'https://tokenregistry.net'}
 									target={'_blank'}
 									className={'w-full'}>
 									<button
