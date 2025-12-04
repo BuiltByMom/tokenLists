@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import {SWRConfig} from 'swr';
 
 import type {ReactElement} from 'react';

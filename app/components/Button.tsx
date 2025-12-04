@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import {cl} from '@builtbymom/web3/utils';
 
 import type {ComponentPropsWithoutRef, MouseEvent, ReactElement, ReactNode} from 'react';

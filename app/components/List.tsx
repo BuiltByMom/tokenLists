@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {toast} from 'react-hot-toast';
 import Link from 'next/link';
 import {useParams, usePathname, useRouter} from 'next/navigation';

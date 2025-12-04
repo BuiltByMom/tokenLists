@@ -1,6 +1,7 @@
 'use client';
 
-import React, {Fragment, useMemo, useState} from 'react';
+import {Fragment, useMemo, useState} from 'react';
+import Link from 'next/link';
 import {useRouter} from 'next/navigation';
 import * as chains from 'wagmi/chains';
 import axios from 'axios';
@@ -15,6 +16,8 @@ import type {ReactElement} from 'react';
 import type {TNDict} from '@builtbymom/web3/types';
 import type {TTokenListItem, TTokenListSummary} from '@/utils/types/types';
 
+import {BackgroundPatternAnimated} from '@/app/components/BackgroundPatternAnimated';
+import HappyIcon from '@/app/components/icons/Happy';
 import TokenListHero from '@/app/components/TokenListHero';
 import {TokenListTable} from '@/app/components/TokenListTable';
 import LEGACY_TOKEN_LISTS from '@/utils/legacyTokenLists';
@@ -205,27 +208,42 @@ function Lists(): ReactElement {
 	return (
 		<Fragment>
 			<TokenListHero summary={summary} />
+
 			<div className={'mx-auto mb-10 grid w-full max-w-5xl'}>
-				<div className={'box-0 w-full p-4 md:p-6'}>
-					<h2 className={'pb-2 text-lg font-medium'}>
-						{'NEW! Automated Chain Lists: Always Fresh, Always Reliable!'}
-					</h2>
-					<div className={'text-sm leading-relaxed text-neutral-700'}>
-						<p>
-							{
-								'Every Sunday, Tokenlistooor performs a comprehensive update to ensure our token lists are up-to-date.'
-							}
-						</p>
-						<p>
-							{
-								'We check and update thousands of tokens from various sources, ensuring the data reflects the latest information.'
-							}
-						</p>
-						<p>
-							{'Tokens that appear in '}
-							<b>{'at least 50% of all sources'}</b>
-							{' are selected to create our Chain Lists.'}
-						</p>
+				<div className={' relative overflow-hidden rounded-lg !bg-[#FF401A] p-4 md:p-10'}>
+					<BackgroundPatternAnimated />
+					<div className={'relative z-50 flex w-full flex-row items-center gap-10'}>
+						<HappyIcon className={'size-52'} />
+						<div className={'rounded-lg bg-white p-4 shadow-lg'}>
+							<h2 className={'pb-4 text-xl font-medium'}>
+								{'TokenRegistry: Onchain Trust for Every Token'}
+							</h2>
+							<div className={'text-sm leading-relaxed'}>
+								<p className={'pb-2'}>
+									{
+										'Submit and verify your token fully on-chain with TokenRegistry, featuring standardized metadata, governance-based approval, and permanent IPFS storage.'
+									}
+								</p>
+								<p>
+									{
+										'Built to power Tokenlistooor and support the broader Web3 ecosystem with transparent, reliable token data.'
+									}
+								</p>
+							</div>
+							<div className={'mt-6 flex w-full justify-center'}>
+								<Link
+									href={'https://tokenregistry.builtby.mom/'}
+									target={'_blank'}
+									className={'w-full'}>
+									<button
+										className={
+											'rounded-xs focus-visible:ring-[#FF401A]-light disabled:bg-separator disabled:text-subtle dark:ring-offset-neutral-950 inline-flex h-10 w-full items-center justify-center gap-2 whitespace-nowrap bg-[#FF401A]/20 px-4 py-2 text-sm font-medium text-[#FF401A] ring-offset-white transition-colors hover:bg-[#FF401A]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed dark:focus-visible:ring-neutral-300 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0'
+										}>
+										{'Move OnChain'}
+									</button>
+								</Link>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

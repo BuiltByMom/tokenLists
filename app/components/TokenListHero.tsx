@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import {toast} from 'react-hot-toast';
 import Link from 'next/link';
 import dayjs, {extend} from 'dayjs';

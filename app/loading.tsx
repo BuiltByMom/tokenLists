@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {IconSpinner} from '@/app/components/icons/IconSpinner';
 
 export default function Loading(): React.ReactElement {

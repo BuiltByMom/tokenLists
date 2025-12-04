@@ -1,5 +1,3 @@
-import React from 'react';
-
 import type {ReactElement} from 'react';
 
 export function IconChevronBoth(props: React.SVGProps<SVGSVGElement>): ReactElement {
