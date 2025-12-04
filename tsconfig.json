@@ -1,72 +1,97 @@
 {
-	"compilerOptions": {
-		"rootDirs": ["."],
-		"baseUrl": ".",
-		"paths": {
-			"@/*": ["./*"],
-			"@common/*": ["components/common/*"],
-			"@icons/*": ["components/icons/*"],
-			"@tokenlistooor/*": ["components/apps/tokenlistooor/*"],
-			"@utils/*": ["utils/*"],
-			"@components/*": ["components/*"]
-		},
-		"types": ["bun-types"],
-		"target": "esnext",
-		"module": "esnext",
-		"lib": ["es6", "es7", "esnext", "dom"],
-		"moduleDetection": "force",
-		"allowJs": true,
-		"jsx": "preserve",
-		"removeComments": false,
-		"strict": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"strictFunctionTypes": true,
-		"strictPropertyInitialization": true,
-		"noImplicitThis": true,
-		"alwaysStrict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noImplicitReturns": true,
-		"noFallthroughCasesInSwitch": true,
-		"moduleResolution": "bundler",
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"inlineSourceMap": true,
-		"inlineSources": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
-		"incremental": true,
-		"isolatedModules": true,
-		"plugins": [
-			{
-				"name": "next"
-			}
-		]
-	},
-	"exclude": ["node_modules", "_app"],
-	"include": [
-		"**/*.css",
-		"**/*.ts",
-		"**/*.tsx",
-		"**/*.d.tsx",
-		"public",
-		"public/manifest.json",
-		"stylelint.config",
-		"commitlint.config",
-		"postcss.config.js",
-		"tailwind.config.js",
-		"next.config.js",
-		"theme.config.js",
-		".eslintrc.js",
-		".next/types/**/*.ts",
-		"jest.config.js",
-		"vitest.config.ts",
-		"worker/index.js",
-		"stylelint.config.js",
-		"utils/*/*.json",
-		"app"
-	]
+  "compilerOptions": {
+    "rootDirs": [
+      "."
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@common/*": [
+        "components/common/*"
+      ],
+      "@icons/*": [
+        "components/icons/*"
+      ],
+      "@tokenlistooor/*": [
+        "components/apps/tokenlistooor/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ]
+    },
+    "types": [
+      "bun-types"
+    ],
+    "target": "esnext",
+    "module": "esnext",
+    "lib": [
+      "es6",
+      "es7",
+      "esnext",
+      "dom"
+    ],
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "removeComments": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "_app"
+  ],
+  "include": [
+    "**/*.css",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.tsx",
+    "public",
+    "public/manifest.json",
+    "stylelint.config",
+    "commitlint.config",
+    "postcss.config.js",
+    "tailwind.config.js",
+    "next.config.js",
+    "theme.config.js",
+    ".eslintrc.js",
+    ".next/types/**/*.ts",
+    "jest.config.js",
+    "vitest.config.ts",
+    "worker/index.js",
+    "stylelint.config.js",
+    "utils/*/*.json",
+    "app",
+    ".next/dev/types/**/*.ts"
+  ]
 }

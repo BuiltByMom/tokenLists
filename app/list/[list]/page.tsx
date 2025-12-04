@@ -1,5 +1,8 @@
 import type {Metadata} from 'next';
+import type {ReactNode} from 'react';
 import type {TTokenListItem} from '@/utils/types/types';
+
+import {redirect} from 'next/navigation';
 
 import List from '@/app/components/List';
 
@@ -56,9 +59,9 @@ async function getList(listId: string): Promise<TTokenListItem | null> {
 	}
 }
 
-export default async function ListPage(props: {params: Promise<{list: string}>}): Promise<unknown> {
+export default async function ListPage(props: {params: Promise<{list: string}>}): Promise<ReactNode> {
 	const params = await props.params;
-	let listName = await params.list;
+	let listName = params.list;
 	if (listName === 'smolassets') {
 		listName = 'smolAssets';
 	}
@@ -68,12 +71,7 @@ export default async function ListPage(props: {params: Promise<{list: string}>})
 	const list = await getList(listName);
 
 	if (!list) {
-		return {
-			redirect: {
-				destination: '/',
-				permanent: false
-			}
-		};
+		redirect('/');
 	}
 
 	return <List list={list} />;
